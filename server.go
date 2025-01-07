@@ -31,5 +31,9 @@ func main() {
 		}
 	})
 
+	http.HandleFunc("/app", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "app.html")
+	})
+
 	http.ListenAndServe(":8080", nil)
 }
