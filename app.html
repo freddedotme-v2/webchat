@@ -25,7 +25,8 @@
             };
 
             socket.onmessage = function (e) {
-                output.innerHTML += e.data + "\n";
+                var message = JSON.parse(e.data);
+                output.innerHTML += message.name + ": " + message.body + "\n";
             };
 
             function send() {

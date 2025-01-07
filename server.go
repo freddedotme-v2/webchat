@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -16,11 +15,6 @@ type Server struct {
 type Client struct {
 	server *Server
 	conn   *websocket.Conn
-}
-
-type Message struct {
-	Name string
-	Body string
 }
 
 var upgrader = websocket.Upgrader{
@@ -55,15 +49,8 @@ func (s *Server) run() {
 	for {
 		msg := <-s.channel
 
-		var message Message
-		err := json.Unmarshal(msg, &message)
-
-		if err != nil {
-			return
-		}
-
 		for _, client := range s.clients {
-			if err := client.conn.WriteMessage(1, []byte(fmt.Sprintf("%s: %s", message.Name, message.Body))); err != nil {
+			if err := client.conn.WriteMessage(1, msg); err != nil {
 				continue
 			}
 		}
