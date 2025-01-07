@@ -1,9 +1,9 @@
 <html>
-    <input id="input" type="text"/>
+    <input id="name" type="text"/>
+    <input id="body" type="text"/>
     <button onclick="send()">Send</button>
     <pre id="output"></pre>
     <script>
-        var input = document.getElementById("input");
         var output = document.getElementById("output");
         var socket = new WebSocket("ws://localhost:8080/listen");
 
@@ -12,12 +12,17 @@
         };
 
         socket.onmessage = function (e) {
-            output.innerHTML += "Server: " + e.data + "\n";
+            output.innerHTML += e.data + "\n";
         };
 
         function send() {
-            socket.send(input.value);
-            input.value = "";
+            var name = document.getElementById("name");
+            var body = document.getElementById("body");
+
+            if (name.value && body.value){
+                socket.send(JSON.stringify({name: name.value, body: body.value}));
+                body.value = "";
+            }
         }
     </script>
 </html>
